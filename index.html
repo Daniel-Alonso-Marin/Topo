@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/> 
+    <title>Test sobre Teoría de Conjuntos</title>
+    <link rel="stylesheet" href="styles.css" />
+    <!-- Include MathJax -->
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <h1>Test sobre Teoría de Conjuntos</h1>
+    <div id="quiz-container">
+        
+        <div id="question-area"></div>
+        <div id="buttons-container" class="buttons"></div>
+        <div id="explanation-container"></div>
+        <button id="next-question-btn" style="display: none;">Siguiente pregunta</button>
+    </div>
+    <footer>
+        Algunas explicaciones estan generadas por ChatGPT, valida la información.
+    </footer>
+
+    <script>
+        const questions = [
+    {
+        "Pregunta": "\\( \\mathbb{Q} \\) es infinito numerable.",
+        "Respuesta": "Verdadero",
+        "Explicación": "Cada fracción en \\( \\mathbb{Q} \\) puede representarse como un par ordenado de enteros \\( (a, b) \\), donde \\( b \\neq 0 \\). El conjunto de los números enteros \\( \\mathbb{Z} \\) es numerable, y el producto cartesiano de dos conjuntos numerables también es numerable. Por lo tanto, \\( \\mathbb{Q} \\) es un conjunto numerable."
+    },
+    {
+        "Pregunta": "Sean \\( f : X \\to Y \\) una aplicación, y \\( A \\subseteq X \\). Entonces \\( A = f^{-1}(f(A)) \\).",
+        "Respuesta": "Falso",
+        "Explicación": "Por ejemplo, si \\( f \\) es constante y \\( A \\neq \\emptyset \\), entonces \\( f^{-1}(f(A)) = X \\). Esto sucede porque la imagen inversa de un conjunto bajo una función constante incluye todos los elementos del dominio \\( X \\). Por lo tanto, \\( A \\neq f^{-1}(f(A)) \\) en este caso."
+    },
+    {
+        "Pregunta": "Sean \\( f : X \\to Y \\) una aplicación, y \\( B \\subseteq Y \\). Entonces \\( B = f(f^{-1}(B)) \\).",
+        "Respuesta": "Falso",
+        "Explicación": "La afirmación es falsa porque \\( f^{-1}(B) \\) podría ser el conjunto vacío si \\( B \\) no intersecta con la imagen de \\( f \\). En ese caso, \\( f(f^{-1}(B)) \\) sería el conjunto vacío, mientras que \\( B \\) no lo es necesariamente. Esto demuestra que \\( B \\neq f(f^{-1}(B)) \\) en general."
+    },
+    {
+        "Pregunta": "\\( \\mathbb{R} \\) es infinito numerable.",
+        "Respuesta": "Falso",
+        "Explicación": "El conjunto \\( \\mathbb{R} \\) (los números reales) no es numerable. Esto se demuestra mediante el argumento diagonal de Cantor, que muestra que no existe una biyección entre \\( \\mathbb{R} \\) y \\( \\mathbb{N} \\). Por lo tanto, \\( \\mathbb{R} \\) tiene una cardinalidad mayor que la de los conjuntos numerables."
+    },
+    {
+        "Pregunta": "Dados dos subconjuntos \\( A, B \\) de un conjunto \\( X \\). Se cumple que  \\[ X \\setminus (A \\cap B) = (X \\setminus A) \\cup (X \\setminus B). \\]",
+        "Respuesta": "Verdadero",
+        "Explicación": "Los elementos que no están en \\( A \\cap B \\) son aquellos que no pertenecen simultáneamente a \\( A \\) y \\( B \\). Esto equivale a los elementos que no están en \\( A \\) o no están en \\( B \\). Por las leyes de De Morgan, esta relación puede expresarse como: \\[ X \\setminus (A \\cap B) = (X \\setminus A) \\cup (X \\setminus B). \\].Por lo tanto, la afirmación es verdadera."
+    },
+    {
+        "Pregunta": "Dados dos subconjuntos \\( A, B \\) de un conjunto \\( X \\). Se cumple que  \\[ X \\setminus (A \\cup B) = (X \\setminus A) \\cap (X \\setminus B). \\]",
+        "Respuesta": "Verdadero",
+        "Explicación": "Los elementos que no están en \\( A \\cup B \\) son aquellos que no pertenecen ni a \\( A \\) ni a \\( B \\). Esto equivale a los elementos que están fuera de \\( A \\) y también fuera de \\( B \\). Por las leyes de De Morgan, esta relación puede expresarse como: \\[ X \\setminus (A \\cup B) = (X \\setminus A) \\cap (X \\setminus B). \\] Por lo tanto, la afirmación es verdadera."
+    },
+    {
+        "Pregunta": "Dados dos subconjuntos \\( A, B \\) de un conjunto \\( X \\). Se cumple que  \\[ X \\setminus (A \\cap B) = (X \\setminus A) \\cap (X \\setminus B). \\]",
+        "Respuesta": "Falso",
+        "Explicación": "La afirmación es falsa porque, según las leyes de De Morgan, la expresión correcta sería: \\[ X \\setminus (A \\cap B) = (X \\setminus A) \\cup (X \\setminus B). \\] La operación complementaria de la intersección no es la intersección de los complementos, sino la unión de los complementos. Por lo tanto, la igualdad presentada en la pregunta no es válida."
+    },
+    {
+        "Pregunta": "Sean \\( X \\) e \\( Y \\) dos conjuntos, y sean \\( A \\) y \\( B \\) dos subconjuntos de \\( X \\) e \\( Y \\) respectivamente. Entonces \\[ X \\times Y \\setminus A \\times B = (X \\setminus A) \\times (Y \\setminus B). \\]",
+        "Respuesta": "Falso",
+        "Explicación": "La afirmación es falsa porque la diferencia cartesiana no se distribuye como el producto cartesiano de las diferencias. En realidad, si se eliminan los elementos de \\( A \\times B \\) del producto cartesiano \\( X \\times Y \\), se eliminan únicamente las parejas \\((a, b)\\) tales que \\( a \\in A \\) y \\( b \\in B \\). La igualdad presentada no representa correctamente este concepto."
+    },
+    {
+        "Pregunta": "Sean \\( f : X \\to Y \\) una aplicación, y \\( B \\subseteq Y \\). Entonces \\( B \\subseteq f(f^{-1}(B)) \\).",
+        "Respuesta": "Falso",
+        "Explicación": "La afirmación es falsa porque \\( f(f^{-1}(B)) \\) puede contener elementos adicionales que no están en \\( B \\). En particular, \\( f(f^{-1}(B)) \\) incluye todos los elementos del codominio \\( Y \\) que están asociados a algún elemento de \\( f^{-1}(B) \\), lo que puede incluir elementos fuera de \\( B \\). Por lo tanto, no siempre se cumple que \\( B \\subseteq f(f^{-1}(B)) \\)."
+    },
+    {
+        "Pregunta": "Sean \\( f : X \\to Y \\) una aplicación, y \\( A \\subseteq X \\). Entonces \\( f^{-1}(f(A)) \\subseteq A \\).",
+        "Respuesta": "Falso",
+        "Explicación": "La afirmación es falsa porque \\( f^{-1}(f(A)) \\) puede contener elementos que no están en \\( A \\). En particular, si \\( x \\notin A \\) pero \\( f(x) \\in f(A) \\), entonces \\( x \\in f^{-1}(f(A)) \\), aunque \\( x \\notin A \\). Esto ocurre porque \\( f^{-1}(f(A)) \\) incluye todos los elementos del dominio \\( X \\) que mapean a algún elemento en \\( f(A) \\), independientemente de si esos elementos estaban originalmente en \\( A \\)."
+    },
+    {
+        "Pregunta": "Dados dos subconjuntos \\( A, B \\) de un conjunto \\( X \\). Se cumple que  \\[ X \\setminus (A \\cup B) = (X \\setminus A) \\cup (X \\setminus B). \\]",
+        "Respuesta": "Falso",
+        "Explicación": "La afirmación es falsa porque, según las leyes de De Morgan, la diferencia \\( X \\setminus (A \\cup B) \\) es igual a: \\[ X \\setminus (A \\cup B) = (X \\setminus A) \\cap (X \\setminus B). \\] El operador correcto para la expresión debería ser una intersección, no una unión. Como contraejemplo, si tomamos \\( X = \\{1, 2\\} \\), \\( A = \\{1\\} \\), \\( B = \\{2\\} \\), se puede verificar que: \\[ X \\setminus (A \\cup B) = \\emptyset, \\] mientras que: \\[ (X \\setminus A) \\cup (X \\setminus B) = X. \\] Por lo tanto, la igualdad presentada no es válida."
+    },
+    {
+        "Pregunta": "Dados tres conjuntos \\( A, B, C \\). Se cumple que  \\[ A \\cap (B \\cup C) = (A \\cap B) \\cup (A \\cap C). \\]",
+        "Respuesta": "Verdadero",
+        "Explicación": "La afirmación es verdadera porque la intersección y la unión son distributivas entre sí. Específicamente, para cualquier conjunto \\( A \\), \\( B \\), y \\( C \\), se cumple la propiedad distributiva: \\[ A \\cap (B \\cup C) = (A \\cap B) \\cup (A \\cap C). \\] Esto puede demostrarse verificando que cada elemento de \\( A \\cap (B \\cup C) \\) pertenece a \\( (A \\cap B) \\cup (A \\cap C) \\) y viceversa."
+    },
+    {
+        "Pregunta": "Dados tres conjuntos \\( A, B, C \\). Se cumple que  \\[ A \\cap (B \\cup C) = (A \\cap B) \\cup C. \\]",
+        "Respuesta": "Falso",
+        "Explicación": "La afirmación es falsa porque la propiedad distributiva de la intersección con respecto a la unión establece que: \\[ A \\cap (B \\cup C) = (A \\cap B) \\cup (A \\cap C). \\] El término \\( (A \\cap B) \\cup C \\) no representa correctamente la distribución de la intersección \\( A \\cap \\) sobre \\( B \\cup C \\), ya que incluye elementos de \\( C \\) que podrían no estar en \\( A \\)."
+    },
+    {
+        "Pregunta": "Dados tres conjuntos \\( A, B, C \\). Se cumple que  \\[ A \\cup (B \\cap C) = (A \\cup B) \\cap (A \\cup C). \\]",
+        "Respuesta": "Verdadero",
+        "Explicación": "La afirmación es verdadera porque la unión y la intersección son distributivas entre sí. En particular, para cualquier conjunto \\( A, B, C \\), se cumple la propiedad distributiva: \\[ A \\cup (B \\cap C) = (A \\cup B) \\cap (A \\cup C). \\] Esto puede verificarse aplicando las definiciones de unión e intersección y observando que cada elemento de \\( A \\cup (B \\cap C) \\) pertenece a \\( (A \\cup B) \\cap (A \\cup C) \\), y viceversa."
+    },
+    {
+        "Pregunta": "Dados tres conjuntos \\( A, B, C \\). Se cumple que  \\[ A \\cup (B \\cap C) = (A \\cup B) \\cap C. \\]",
+        "Respuesta": "Falso",
+        "Explicación": "La afirmación es falsa porque la propiedad distributiva correcta de la unión con respecto a la intersección establece que: \\[ A \\cup (B \\cap C) = (A \\cup B) \\cap (A \\cup C). \\] La expresión \\( (A \\cup B) \\cap C \\) no distribuye correctamente la unión de \\( A \\) con \\( B \\cap C \\), ya que puede incluir elementos en \\( C \\) que no satisfacen \\( A \\cup B \\)."
+    },
+    {
+        "Pregunta": "Las partes de un conjunto finito son finitas.",
+        "Respuesta": "Verdadero",
+        "Explicación": "La afirmación es verdadera porque el conjunto de partes (o conjunto potencia) de un conjunto finito tiene un número finito de elementos. En particular, si el conjunto de partida tiene \\( n \\) elementos, entonces su conjunto de partes tiene \\( 2^n \\) elementos, ya que cada elemento puede estar o no estar en un subconjunto dado."
+    },
+    {
+        "Pregunta": "Las partes de un conjunto numerable son numerables.",
+        "Respuesta": "Falso",
+        "Explicación": "La afirmación es falsa porque el conjunto de partes (o conjunto potencia) de un conjunto numerable no es numerable. Aunque el conjunto inicial es numerable, su conjunto potencia tiene una cardinalidad mayor, equivalente a la cardinalidad del conjunto de los números reales \\( \\mathbb{R} \\). Esto se demuestra mediante el argumento diagonal de Cantor, que establece que no puede existir una biyección entre un conjunto y su conjunto de partes."
+    },
+    {
+        "Pregunta": "Se tiene la siguiente igualdad conjuntista: \\( \\{\\emptyset\\} = \\emptyset \\).",
+        "Respuesta": "Falso",
+        "Explicación": "La afirmación es falsa porque \\( \\{\\emptyset\\} \\) no es el conjunto vacío. \\( \\{\\emptyset\\} \\) es un conjunto que contiene un único elemento, y ese elemento es el conjunto vacío (\\( \\emptyset \\)). En notación: \\[ \\emptyset \\in \\{\\emptyset\\}, \\] lo cual implica que \\( \\{\\emptyset\\} \\neq \\emptyset \\), ya que el conjunto vacío no tiene elementos. En definitiva, no es lo mismo tener una caja vacia que no tener nada."
+    },
+    {
+        "Pregunta": "Sean \\( A_1, A_2 \\subseteq X \\) y \\( B_1, B_2 \\subseteq Y \\). Entonces  \\[ (A_1 \\times B_1) \\cap (A_2 \\times B_2) = (A_1 \\cap A_2) \\times (B_1 \\cap B_2). \\]",
+        "Respuesta": "Verdadero",
+        "Explicación": "La afirmación es verdadera porque la intersección del producto cartesiano de dos conjuntos sigue la regla: \\[ (A_1 \\times B_1) \\cap (A_2 \\times B_2) = \\{(x, y) \\mid x \\in (A_1 \\cap A_2), y \\in (B_1 \\cap B_2)\\}. \\] Esto corresponde exactamente a \\( (A_1 \\cap A_2) \\times (B_1 \\cap B_2) \\). Por lo tanto, la igualdad presentada es válida."
+    },
+    {
+        "Pregunta": "Sean \\( A_1, A_2 \\subseteq X \\) y \\( B_1, B_2 \\subseteq Y \\). Entonces  \\[ (A_1 \\times B_1) \\cup (A_2 \\times B_2) = (A_1 \\cup A_2) \\times (B_1 \\cup B_2). \\]",
+        "Respuesta": "Falso",
+        "Explicación": "La afirmación es falsa porque la unión del producto cartesiano no se distribuye de esta manera en general. Como contraejemplo, consideremos: \\[ A_1 = B_1 = [0, 1/2] \\quad \\text{y} \\quad A_2 = B_2 = [1/2, 1] \\quad \\text{en } \\mathbb{R}. \\] En este caso: \\[ (A_1 \\times B_1) \\cup (A_2 \\times B_2) \\neq (A_1 \\cup A_2) \\times (B_1 \\cup B_2), \\] ya que el lado derecho incluiría pares como \\( (0, 1) \\), que no pertenecen a ninguno de los productos cartesianos \\( A_1 \\times B_1 \\) o \\( A_2 \\times B_2 \\). Por lo tanto, la igualdad no se cumple."
+    },
+    {
+        "Pregunta": "Sean \\( f : X \\to Y \\) una aplicación inyectiva, y \\( A \\subseteq X \\). Entonces  \\[ f^{-1}(f(A)) \\subseteq A. \\]",
+        "Respuesta": "Verdadero",
+        "Explicación": "La afirmación es verdadera porque \\( f \\) es inyectiva, lo que implica que cada elemento en la imagen \\( f(A) \\) proviene de un único elemento en \\( A \\). Por lo tanto, al tomar la preimagen \\( f^{-1}(f(A)) \\), no se incluyen elementos fuera de \\( A \\), ya que no hay puntos fuera de \\( A \\) cuya imagen coincida con puntos de \\( A \\). Esto asegura que: \\[ f^{-1}(f(A)) \\subseteq A. \\]"
+    },
+    {
+        "Pregunta": "Sean \\( f : X \\to Y \\) una aplicación inyectiva, y \\( B \\subseteq Y \\). Entonces  \\[ B \\subseteq f(f^{-1}(B)). \\]",
+        "Respuesta": "Falso",
+        "Explicación": "La afirmación es falsa porque, aunque \\( f \\) sea inyectiva, no garantiza que \\( B \\subseteq f(f^{-1}(B)) \\). Esto se debe a que \\( f^{-1}(B) \\) solo considera los elementos de \\( X \\) que mapean a elementos de \\( B \\), y al aplicar \\( f \\) nuevamente, podríamos obtener una imagen que no cubra todo \\( B \\), especialmente si \\( B \\) contiene elementos que no están en la imagen de \\( f \\). Por lo tanto, \\( B \\subseteq f(f^{-1}(B)) \\) no siempre se cumple."
+    },
+    {
+        "Pregunta": "Sean \\( f : X \\to Y \\) una aplicación suprayectiva, y \\( A \\subseteq X \\). Entonces  \\[ f^{-1}(f(A)) \\subseteq A. \\]",
+        "Respuesta": "Falso",
+        "Explicación": "La afirmación es falsa porque la suprayectividad de \\( f \\) no garantiza que \\( f^{-1}(f(A)) \\subseteq A \\). Un contraejemplo sería si \\( Y \\) tiene un único elemento (es decir, \\( f \\) es constante), entonces \\( f(A) = Y \\) y \\( f^{-1}(f(A)) = X \\). Esto incluye elementos fuera de \\( A \\), lo que contradice la afirmación. Por lo tanto, la relación no se cumple en general."
+    },
+    {
+        "Pregunta": "Sean \\( f : X \\to Y \\) una aplicación suprayectiva, y \\( B \\subseteq Y \\). Entonces  \\[ B \\subseteq f(f^{-1}(B)). \\]",
+        "Respuesta": "Verdadero",
+        "Explicación": "La afirmación es verdadera porque, al ser \\( f \\) suprayectiva, cada elemento de \\( B \\) tiene al menos una preimagen en \\( X \\) bajo \\( f \\). Por definición de la imagen, se garantiza que: \\[ f(f^{-1}(B)) \\] contiene todos los elementos de \\( B \\), ya que \\( f^{-1}(B) \\) recoge todas las preimágenes de los elementos de \\( B \\). Esto implica que \\( B \\subseteq f(f^{-1}(B)) \\)."
+    },
+    {
+        "Pregunta": "Sean \\( f : X \\to Y \\) una aplicación, y \\( A \\subseteq X \\). Entonces  \\[ A \\subseteq f^{-1}(f(A)). \\]",
+        "Respuesta": "Verdadero",
+        "Explicación": "La afirmación es verdadera porque, por definición de la preimagen, cualquier elemento \\( x \\in A \\) se mapea a \\( f(x) \\in f(A) \\). Por lo tanto, \\( x \\in f^{-1}(f(A)) \\), ya que \\( f^{-1}(f(A)) \\) incluye todos los elementos de \\( X \\) que se mapean a \\( f(A) \\). Esto asegura que \\( A \\subseteq f^{-1}(f(A)) \\)."
+    }
+];
+
+        let remainingQuestions = [...questions];
+
+        function getRandomQuestion() {
+            if (remainingQuestions.length === 0) {
+                alert("¡Has completado todas las preguntas!");
+                document.getElementById("question-area").innerHTML = "<h2>¡Fin del cuestionario!</h2>";
+                document.getElementById("buttons-container").style.display = "none";
+                document.getElementById("next-question-btn").style.display = "none";
+                return null;
+            }
+            const randomIndex = Math.floor(Math.random() * remainingQuestions.length);
+            const question = remainingQuestions[randomIndex];
+            remainingQuestions.splice(randomIndex, 1);
+            return question;
+        }
+
+        function showQuestion(questionObj) {
+            const questionArea = document.getElementById("question-area");
+            const buttonsContainer = document.getElementById("buttons-container");
+            const explanationContainer = document.getElementById("explanation-container");
+
+            // Reset everything
+            questionArea.innerHTML = questionObj.Pregunta;
+            explanationContainer.innerHTML = "";
+            buttonsContainer.innerHTML = "";
+            explanationContainer.style.display = "none";
+
+            // Trigger MathJax to render LaTeX
+            MathJax.typesetPromise();
+
+            // Create buttons
+            const trueButton = document.createElement("button");
+            trueButton.textContent = "Verdadero";
+            trueButton.classList.add("answer-button");
+            trueButton.addEventListener("click", () => {
+                disableButtons(trueButton, falseButton); // Disable buttons and make them gray
+                showExplanation(questionObj, "Verdadero");
+            });
+
+            const falseButton = document.createElement("button");
+            falseButton.textContent = "Falso";
+            falseButton.classList.add("answer-button");
+            falseButton.addEventListener("click", () => {
+                disableButtons(trueButton, falseButton); // Disable buttons and make them gray
+                showExplanation(questionObj, "Falso");
+            });
+
+            buttonsContainer.appendChild(trueButton);
+            buttonsContainer.appendChild(falseButton);
+        }
+
+        function showExplanation(questionObj, userAnswer) {
+            const explanationContainer = document.getElementById("explanation-container");
+
+            // Check if the answer is correct
+            const isCorrect = userAnswer.toLowerCase() === questionObj.Respuesta.toLowerCase();
+            explanationContainer.classList.remove("correct", "incorrect");
+            explanationContainer.classList.add(isCorrect ? "correct" : "incorrect");
+            
+            explanationContainer.style.display = "block";
+
+            explanationContainer.innerHTML = "<strong>" + 
+                (isCorrect ? "¡Correcto!" : "Respuesta incorrecta.") + 
+                "</strong><br/><br/>" +  questionObj.Explicación;
+
+            // Trigger MathJax to render LaTeX
+            MathJax.typesetPromise();
+
+            // Show the "Next Question" button
+            document.getElementById("next-question-btn").style.display = "block";
+        }
+
+        function disableButtons(trueButton, falseButton) {
+            // Add 'disabled' class to both buttons
+            trueButton.classList.add("disabled");
+            falseButton.classList.add("disabled");
+
+            // Disable both buttons to prevent further clicks
+            trueButton.disabled = true;
+            falseButton.disabled = true;
+        }
+
+        document.getElementById("next-question-btn").addEventListener("click", () => {
+            const nextQuestion = getRandomQuestion();
+            if (nextQuestion) {
+                showQuestion(nextQuestion);
+                document.getElementById("next-question-btn").style.display = "none"; // Hide the button again
+            }
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const firstQuestion = getRandomQuestion();
+            if (firstQuestion) {
+                showQuestion(firstQuestion);
+            }
+        });
+    </script>
+</body>
+</html>
